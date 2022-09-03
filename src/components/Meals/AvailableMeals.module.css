@@ -22,3 +22,8 @@
     transform: translateY(0);
   }
 }
+
+.MealsLoading {
+  color: white;
+  text-align: center;
+}
