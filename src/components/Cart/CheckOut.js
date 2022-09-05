@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import useInput from "../../hooks/use-input";
 import classes from "./CheckOut.module.css";
 
@@ -6,17 +6,10 @@ import classes from "./CheckOut.module.css";
 // const isFiveChars = (value) => value.trim().length === 5;
 
 const CheckOut = (props) => {
-  const [formInputsValidity, setFormInputsValidity] = useState({
-    name: true,
-    street: true,
-    city: true,
-    postalCode: true,
-  });
-
   const {
     value: enteredName,
     isValid: enteredNameIsValid,
-    // hasError: nameInputIsInvalid,
+    hasError: nameInputIsInvalid,
     valueInputChangeHandler: nameInputChangeHandler,
     valueInputBlurHandler: nameInputBlurHandler,
     reset: resetName,
@@ -25,7 +18,7 @@ const CheckOut = (props) => {
   const {
     value: enteredStreet,
     isValid: enteredStreetIsValid,
-    // hasError: streetInputIsInvalid,
+    hasError: streetInputIsInvalid,
     valueInputChangeHandler: streetInputChangeHandler,
     valueInputBlurHandler: streetInputBlurHandler,
     reset: resetStreet,
@@ -34,7 +27,7 @@ const CheckOut = (props) => {
   const {
     value: enteredPostalCode,
     isValid: enteredPostalCodeIsValid,
-    // hasError: postalCodeInputIsInvalid,
+    hasError: postalCodeInputIsInvalid,
     valueInputChangeHandler: postalCodeInputHandler,
     valueInputBlurHandler: postalCodeInputBlurHandler,
     reset: resetPostalCode,
@@ -43,7 +36,7 @@ const CheckOut = (props) => {
   const {
     value: enteredCity,
     isValid: enteredCityIsValid,
-    // hasError: cityInputIsInvalid,
+    hasError: cityInputIsInvalid,
     valueInputChangeHandler: cityInputChangeHandler,
     valueInputBlurHandler: cityInputBlurHandler,
     reset: resetCity,
@@ -54,20 +47,32 @@ const CheckOut = (props) => {
   // const enteredCityIsValid = !isEmpty(enteredCity);
   // const enteredPostalCodeIsValid = isFiveChars(enteredPostalCode);
 
+  const nameInputValidityClasses = `${classes.control} ${
+    nameInputIsInvalid ? classes.invalid : ""
+  }`;
+  const streetInputValidityClasses = `${classes.control} ${
+    streetInputIsInvalid ? classes.invalid : ""
+  }`;
+  const postalCodeInputValidityClasses = `${classes.control} ${
+    postalCodeInputIsInvalid ? classes.invalid : ""
+  }`;
+  const cityInputValidityClasses = `${classes.control} ${
+    cityInputIsInvalid ? classes.invalid : ""
+  }`;
+
+  let formIsValid =
+    enteredNameIsValid &&
+    enteredStreetIsValid &&
+    enteredCityIsValid &&
+    enteredPostalCodeIsValid;
+
   const confirmHandler = (e) => {
     e.preventDefault();
-
-    setFormInputsValidity({
-      name: enteredName,
-      street: enteredStreet,
-      city: enteredCity,
-      postalCode: enteredPostalCode,
-    });
-    let formIsValid =
-      enteredNameIsValid &&
-      enteredStreetIsValid &&
-      enteredCityIsValid &&
-      enteredPostalCodeIsValid;
+    // let formIsValid =
+    //   enteredNameIsValid &&
+    //   enteredStreetIsValid &&
+    //   enteredCityIsValid &&
+    //   enteredPostalCodeIsValid;
 
     if (!formIsValid) {
       return;
@@ -86,19 +91,6 @@ const CheckOut = (props) => {
     resetCity();
   };
 
-  const nameInputValidityClasses = `${classes.control} ${
-    !formInputsValidity.name ? classes.invalid : ""
-  }`;
-  const streetInputValidityClasses = `${classes.control} ${
-    !formInputsValidity.street ? classes.invalid : ""
-  }`;
-  const postalCodeInputValidityClasses = `${classes.control} ${
-    !formInputsValidity.postalCode ? classes.invalid : ""
-  }`;
-  const cityInputValidityClasses = `${classes.control} ${
-    !formInputsValidity.city ? classes.invalid : ""
-  }`;
-
   return (
     <form className={classes.form} onSubmit={confirmHandler}>
       <div className={nameInputValidityClasses}>
@@ -110,7 +102,7 @@ const CheckOut = (props) => {
           onChange={nameInputChangeHandler}
           onBlur={nameInputBlurHandler}
         />
-        {!formInputsValidity.name && <p>Please enter Valid Name!</p>}
+        {nameInputIsInvalid && <p>Please enter Valid Name!</p>}
       </div>
       <div className={streetInputValidityClasses}>
         <label htmlFor="street">Street</label>
@@ -121,7 +113,7 @@ const CheckOut = (props) => {
           onChange={streetInputChangeHandler}
           onBlur={streetInputBlurHandler}
         />
-        {!formInputsValidity.street && <p>Please enter Valid Street!</p>}
+        {streetInputIsInvalid && <p>Please enter Valid Street!</p>}
       </div>
       <div className={postalCodeInputValidityClasses}>
         <label htmlFor="postal">Postal Code</label>
@@ -132,9 +124,7 @@ const CheckOut = (props) => {
           onChange={postalCodeInputHandler}
           onBlur={postalCodeInputBlurHandler}
         />
-        {!formInputsValidity.postalCode && (
-          <p>Please enter Valid Postal code!</p>
-        )}
+        {postalCodeInputIsInvalid && <p>Please enter Valid Postal code!</p>}
       </div>
       <div className={cityInputValidityClasses}>
         <label htmlFor="city">City</label>
@@ -145,7 +135,7 @@ const CheckOut = (props) => {
           onChange={cityInputChangeHandler}
           onBlur={cityInputBlurHandler}
         />
-        {!formInputsValidity.city && <p>Please enter Valid City!</p>}
+        {cityInputIsInvalid && <p>Please enter Valid City!</p>}
       </div>
       <div className={classes.actions}>
         <button type="button" onClick={props.onCancel}>
