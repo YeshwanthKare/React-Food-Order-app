@@ -40,6 +40,16 @@ const Cart = ({ closeButton }) => {
     setIsCheckOut(true);
   };
 
+  const submittingCartData = async (userData) => {
+    await fetch(
+      "https://react-http-c4544-default-rtdb.firebaseio.com/orders.json",
+      {
+        method: "POST",
+        body: JSON.stringify({ user: userData, orderedItems: cartCtx.items }),
+      }
+    );
+  };
+
   let modalActions = (
     <div className={classes.actions}>
       <button className={classes["button--alt"]} onClick={closeButton}>
@@ -60,7 +70,9 @@ const Cart = ({ closeButton }) => {
         <span>Total</span>
         <span>{totalAmount}</span>
       </div>
-      {isCheckOut && <CheckOut onCancel={closeButton} />}
+      {isCheckOut && (
+        <CheckOut onConfirm={submittingCartData} onCancel={closeButton} />
+      )}
       {!isCheckOut && modalActions}
     </Modal>
   );

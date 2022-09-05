@@ -62,3 +62,11 @@
   border-color: #aa0b20;
   background-color: #ffeff1;
 }
+
+button:disabled:active,
+button:disabled:hover,
+button:disabled {
+  background-color: #ccc;
+  color: white;
+  border-color: #5a1a01;
+}
